@@ -98,3 +98,45 @@ machop = FightingPokemon('Machop', '040', 1, 70, 80, 50, 35, 35, 35, 0, [('Reven
 piplup = AquaPokemon('piplup', '007', 1, 53, 51, 53, 61, 56, 40, 0, [('water_gun', 40), ('peck', 35)])
 shinx = ElectricPokemon('shinx', '017', 1, 45, 65, 34, 40, 34, 45, 0, [('thunder_shock', 40), ('bite', 60)])
 turtwig = GrassPokemon('Turtwig', '001', 1, 55, 68, 64, 45, 55, 31, 0, [('absorb', 20), ('razor_leaf', 55)])
+
+
+def battle(pokemon1: Pokemon, pokemon2: Pokemon):
+    print(f"A battle begins between {pokemon1.name} and {pokemon2.name}!")
+    
+    if pokemon1.speed > pokemon2.speed:
+        first = pokemon1
+        second = pokemon2
+    elif pokemon2.speed > pokemon1.speed:
+        first = pokemon2
+        second = pokemon1
+    else:
+        first, second = random.sample([pokemon1, pokemon2], 2)
+    print(f"{first.name} attacks first!")
+    
+    while first.hp > 0 and second.hp > 0:
+        if random.choice(['regular', 'special']) == 'regular':
+            damage = max(first.attack_points - second.defense_points, 0)
+            print(f"{first.name} used a regular attack and dealt {damage} damage to {second.name}!")
+        else:
+            special_damage = max(first.special_attack_points - second.special_defense_points, 0)
+            print(f"{first.name} used a special attack and dealt {special_damage} damage to {second.name}!")
+            
+        second.hp -= damage
+        if second.hp <= 0:
+            print(f"{second.name} fainted! {first.name} wins!")
+            return
+        
+        #second pokemon attack
+        if random.choice(['regular', 'special']) == 'regular':
+            damage = max(second.attack_points - first.defense_points, 0)
+            print(f"{second.name} used a regular attack and dealt {damage} damage to {first.name}!")
+        else:
+            special_damage = max(second.special_attack_points - first.special_defense_points, 0)
+            print(f"{second.name} used a special attack and dealt {special_damage} damage to {first.name}!")
+        
+        first.hp -= damage
+        if first.hp <= 0:
+            print(f"{first.name} fainted! {second.name} wins!")
+            return
+        
+battle(machop, shinx)
