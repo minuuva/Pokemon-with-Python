@@ -4,7 +4,7 @@ from typing import List, Tuple
 class Pokemon:
     def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
                  special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
-                 skill: List[Tuple[str, int]]) -> None:
+                 skill: List[Tuple[str, int, str]]) -> None:
         
         self.name = name
         self.pokedexid = pokedexid
@@ -38,7 +38,7 @@ class Pokemon:
 class FightingPokemon(Pokemon):
     def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
                  special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
-                 skill: List[Tuple[str, int]]) -> None:
+                 skill: List[Tuple[str, int, str]]) -> None:
         
         # Fighting-type Pokemons receive a 20% increase in attack points
         attack_points = int(attack_points * 1.2)
@@ -53,7 +53,7 @@ class FightingPokemon(Pokemon):
 class AquaPokemon(Pokemon):
     def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
                  special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
-                 skill: List[Tuple[str, int]]) -> None:
+                 skill: List[Tuple[str, int, str]]) -> None:
         
         special_attack_points = int(special_attack_points * 1.1)
         defense_points = int(defense_points * 1.1)
@@ -68,7 +68,7 @@ class AquaPokemon(Pokemon):
 class ElectricPokemon(Pokemon):
     def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
                  special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
-                 skill: List[Tuple[str, int]]) -> None:
+                 skill: List[Tuple[str, int, str]]) -> None:
         
         special_attack_points = int(special_attack_points * 1.2)
         
@@ -82,7 +82,7 @@ class ElectricPokemon(Pokemon):
 class GrassPokemon(Pokemon):
     def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
                  special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
-                 skill: List[Tuple[str, int]]) -> None:
+                 skill: List[Tuple[str, int, str]]) -> None:
         
         special_defense_points = int(special_defense_points * 1.3)
         
@@ -94,10 +94,10 @@ class GrassPokemon(Pokemon):
         print(f"{self.name} is a {self.type}-type Pokémon.")
 
 
-machop = FightingPokemon('Machop', '040', 1, 70, 80, 50, 35, 35, 35, 0, [('Revenge', 60), ('Low Sweep', 60)])
-piplup = AquaPokemon('piplup', '007', 1, 53, 51, 53, 61, 56, 40, 0, [('water_gun', 40), ('peck', 35)])
-shinx = ElectricPokemon('shinx', '017', 1, 45, 65, 34, 40, 34, 45, 0, [('thunder_shock', 40), ('bite', 60)])
-turtwig = GrassPokemon('Turtwig', '001', 1, 55, 68, 64, 45, 55, 31, 0, [('absorb', 20), ('razor_leaf', 55)])
+machop = FightingPokemon('Machop', '040', 1, 70, 80, 50, 35, 35, 35, 0, [('revenge', 60, 'regular'), ('low Sweep', 60, 'regular')])
+piplup = AquaPokemon('Piplup', '007', 1, 53, 51, 53, 61, 56, 40, 0, [('water gun', 40, 'special'), ('peck', 35, 'special')])
+shinx = ElectricPokemon('Shinx', '017', 1, 45, 65, 34, 40, 34, 45, 0, [('thunder shock', 40, 'special'), ('bite', 60, 'regular')])
+turtwig = GrassPokemon('Turtwig', '001', 1, 55, 68, 64, 45, 55, 31, 0, [('absorb', 20, 'special'), ('razor leaf', 55, 'special')])
 
 
 def battle(pokemon1: Pokemon, pokemon2: Pokemon):
@@ -114,26 +114,31 @@ def battle(pokemon1: Pokemon, pokemon2: Pokemon):
     print(f"{first.name} attacks first!")
     
     while first.hp > 0 and second.hp > 0:
-        if random.choice(['regular', 'special']) == 'regular':
+        # first pokemon attack
+        move = random.choice(first.skill)
+        if move[2] == 'regular':
             damage = max(first.attack_points - second.defense_points, 0)
-            print(f"{first.name} used a regular attack and dealt {damage} damage to {second.name}!")
+            print(f"{first.name} used {move[0]} and dealt {damage} damage to {second.name}!")
         else:
-            special_damage = max(first.special_attack_points - second.special_defense_points, 0)
-            print(f"{first.name} used a special attack and dealt {special_damage} damage to {second.name}!")
-            
+            damage = max(first.special_attack_points - second.special_defense_points, 0)
+            print(f"{first.name} used {move[0]} and dealt {damage} damage to {second.name}!")
+
         second.hp -= damage
+        
         if second.hp <= 0:
             print(f"{second.name} fainted! {first.name} wins!")
-            return
+            
         
-        #second pokemon attack
-        if random.choice(['regular', 'special']) == 'regular':
+        # second pokemon attack
+        move = random.choice(second.skill)
+        if move[2] == 'regular':
             damage = max(second.attack_points - first.defense_points, 0)
-            print(f"{second.name} used a regular attack and dealt {damage} damage to {first.name}!")
+            print(f"{second.name} used {move[0]} and dealt {damage} damage to {first.name}!")
+            
         else:
-            special_damage = max(second.special_attack_points - first.special_defense_points, 0)
-            print(f"{second.name} used a special attack and dealt {special_damage} damage to {first.name}!")
-        
+            damage = max(second.special_attack_points - first.special_defense_points, 0)
+            print(f"{second.name} used {move[0]} and dealt {damage} damage to {first.name}!")
+            
         first.hp -= damage
         if first.hp <= 0:
             print(f"{first.name} fainted! {second.name} wins!")
