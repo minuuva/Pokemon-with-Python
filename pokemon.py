@@ -112,11 +112,28 @@ class GrassPokemon(Pokemon):
     def display_type(self):
         print(f"{self.name} is a {self.type}-type Pokémon.")
 
+class RockPokemon(Pokemon):
+    def __init__(self, name: str, pokedexid: str, level: int, hp: int, attack_points: int, defense_points: int, 
+                 special_attack_points: int, special_defense_points: int, speed: int, experience_points: int,
+                 skill: List[Tuple[str, int, str]], second_name: str, evolution_level: int) -> None:
+        
+        defense_points = int(defense_points * 1.2)
+        
+        super().__init__(name, pokedexid, level, hp, attack_points, defense_points, 
+                         special_attack_points, special_defense_points, speed, experience_points, skill, second_name, evolution_level)
+        self.type = "Rock" 
+    
+    def display_type(self):
+        print(f"{self.name} is a {self.type}-type Pokémon.")
+
+
 
 machop = FightingPokemon('Machop', '040', 1, 100, 80, 50, 35, 35, 35, 0, [('revenge', 30, 'regular'), ('low Sweep', 30, 'regular'), ('vital throw', 20, 'special')], 'Machoke', 16)
 piplup = AquaPokemon('Piplup', '007', 1, 100, 51, 53, 61, 56, 40, 0, [('water gun', 40, 'special'), ('peck', 35, 'special'), ('fury attack', 30, 'regular')], 'Prinplup', 18)
 shinx = ElectricPokemon('Shinx', '017', 1, 100, 65, 34, 40, 34, 45, 0, [('thunder shock', 40, 'special'), ('bite', 40, 'regular'), ('spark', 40, 'regular')], 'Luxio', 17)
 turtwig = GrassPokemon('Turtwig', '001', 1, 100, 68, 64, 45, 55, 31, 0, [('absorb', 20, 'special'), ('razor leaf', 45, 'special'), ('bite', 40, 'regular')], 'Grotle', 16)
+geodude = RockPokemon('Geodude', '031', 1, 100, 52, 80, 40, 45, 20, 0, [('rollout', 30, 'special'), ('bulldoze', 40, 'regular'), ('explosion', 41, 'special')], 'Graveler', 16)
+
 
 pokemon_list = [machop, piplup, shinx, turtwig]
 
@@ -170,5 +187,5 @@ def battle(pokemon1: Pokemon, pokemon2: Pokemon):
             return
         
 
-while machop.level < 16:
-    machop.train()
+#while machop.level < 16:
+    #machop.train()
